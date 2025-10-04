@@ -7,15 +7,17 @@ public class GameCollectionManager : MonoBehaviour
     [System.Serializable]
     public class GameSlot
     {
-        public string gameName;    // должен совпадать с MechanicCombo.gameName
-        public Image lockImage;    // картинка замка (показывать/скрывать)
-        public Image gameIconImage;// изображение для иконки игры (под замком)
-        public Sprite gameSprite;  // спрайт готовой игры (назначаем в инспекторе либо из combo)
+        public string gameName;
+        public Image lockImage;
+        public Image gameIconImage;
+        public Sprite gameSprite;
     }
 
     public List<GameSlot> slots = new List<GameSlot>();
-
     private Dictionary<string, GameSlot> map;
+    private HashSet<string> unlocked = new HashSet<string>();
+
+    public BuildManager buildManager; // optional: чтобы можно было автозаполнить иконки на старте
 
     private void Awake()
     {
@@ -24,8 +26,6 @@ public class GameCollectionManager : MonoBehaviour
         {
             if (string.IsNullOrEmpty(s.gameName)) continue;
             map[s.gameName] = s;
-
-            // Изначально показываем lock, скрываем иконку
             if (s.lockImage != null) s.lockImage.gameObject.SetActive(true);
             if (s.gameIconImage != null)
             {
@@ -35,35 +35,47 @@ public class GameCollectionManager : MonoBehaviour
         }
     }
 
-    // Разблокировать игру по имени — удаляем замок и показываем иконку
-    public void UnlockGame(string gameName)
+    private void Start()
     {
-        if (string.IsNullOrEmpty(gameName)) return;
+        // optional: pull icons from BuildManager combos
+        if (buildManager != null)
+        {
+            foreach (var combo in buildManager.validCombos)
+            {
+                if (!string.IsNullOrEmpty(combo.gameName))
+                    SetIconFor(combo.gameName, combo.gameIcon);
+            }
+        }
+    }
+
+    // Возвращает true если было новое разблокирование, false если уже было разблокировано или нет слота
+    public bool UnlockGame(string gameName)
+    {
+        if (string.IsNullOrEmpty(gameName)) return false;
+        if (unlocked.Contains(gameName)) return false;
+
         if (!map.TryGetValue(gameName, out var slot))
         {
-            Debug.LogWarning($"GameCollectionManager.UnlockGame: no slot for '{gameName}'");
-            return;
+            Debug.LogWarning($"UnlockGame: нет слота для {gameName}");
+            return false;
         }
 
-        if (slot.lockImage != null) slot.lockImage.gameObject.SetActive(false);
+        unlocked.Add(gameName);
 
+        if (slot.lockImage != null) slot.lockImage.gameObject.SetActive(false);
         if (slot.gameIconImage != null)
         {
             if (slot.gameSprite != null) slot.gameIconImage.sprite = slot.gameSprite;
             slot.gameIconImage.gameObject.SetActive(true);
         }
+        return true;
     }
 
-    // Для удобства — можно программно добавить/обновить иконку (например, брать из BuildManager.MechCombo.gameIcon)
     public void SetIconFor(string gameName, Sprite icon)
     {
         if (string.IsNullOrEmpty(gameName)) return;
         if (!map.TryGetValue(gameName, out var slot)) return;
         slot.gameSprite = icon;
-        if (slot.gameIconImage != null)
-        {
-            slot.gameIconImage.sprite = icon;
-            slot.gameIconImage.gameObject.SetActive(false); // пока что остаётся заблокированной
-        }
+        if (slot.gameIconImage != null) slot.gameIconImage.sprite = icon;
     }
 }

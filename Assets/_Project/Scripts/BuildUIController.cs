@@ -6,12 +6,22 @@ using UnityEngine.EventSystems;
 
 public class BuildUIController : MonoBehaviour
 {
+    [Header("UI / Prefabs")]
+    public GameObject listItemPrefab;
+    public RectTransform dropZoneParent;
+    [Tooltip("Где лежат иконки внизу (parent для иконок)")]
+    public Transform iconSourceParent;
+    [Tooltip("prefab иконки механики (тот же, что внизу)")]
+    public GameObject mechanicIconPrefab;
+
     [Header("References")]
     public GameObject pcCanvas;
-    public RectTransform dropZoneParent;
-    public GameObject listItemPrefab;
-    public Transform iconSourceParent;
     public RectTransform iconDragRoot;
+
+    [Header("Drop layout")]
+    [Tooltip("Если у тебя нет VerticalLayoutGroup, используем этот оффсет при добавлении")]
+    public float listItemSpacing = 40f;
+
 
     [Header("Player / Camera")]
     public PlayerController playerController;
@@ -117,42 +127,92 @@ public class BuildUIController : MonoBehaviour
     {
         GameObject go = Instantiate(listItemPrefab, dropZoneParent);
         var item = go.GetComponent<MechanicListItem>();
-        if (item != null)
-        {
-            item.Setup(mechanicName, this);
-        }
+        if (item != null) item.Setup(mechanicName, this);
         else
         {
             var text = go.GetComponentInChildren<Text>();
             if (text) text.text = mechanicName;
         }
+
+        // позиционирование со смещением (если НЕ используешь VerticalLayoutGroup)
+        // если у контейнера есть LayoutGroup — он сам расставит элементы,
+        // но если нет — ставим вручную оффсет.
+        var rt = go.GetComponent<RectTransform>();
+        if (rt != null)
+        {
+            int index = dropZoneParent.childCount - 1; // новый элемент — последний
+            Vector2 anchored = new Vector2(rt.anchoredPosition.x, -index * listItemSpacing);
+            rt.anchoredPosition = anchored;
+        }
+
         currentMechanicNames.Add(mechanicName);
+    }
+
+    private void OnBuildButton()
+    {
+        MechanicCombo combo = buildManager.Evaluate(currentMechanicNames);
+
+        // Очистка DropZone сразу после билда (по требованию)
+        ClearMechanics();
+
+        if (combo != null)
+        {
+            // разблокируем в коллекции
+            bool newlyUnlocked = collectionManager?.UnlockGame(combo.gameName) ?? false;
+
+            // если это первый раз и combo.unlockMechanicName задана — добавляем новую механику в нижнюю панель
+            if (newlyUnlocked && !string.IsNullOrEmpty(combo.unlockMechanicName) && mechanicIconPrefab != null && iconSourceParent != null)
+            {
+                RevealNewMechanic(combo.unlockMechanicName, combo.unlockMechanicIcon);
+            }
+
+            StartCoroutine(ShowResultAndClose($"Build successful: {combo.gameName}", true));
+        }
+        else
+        {
+            StartCoroutine(ShowResultAndClose("Build failed", false));
+        }
+    }
+
+    private void RevealNewMechanic(string mechName, Sprite mechIcon)
+    {
+        // Instantiate icon prefab in the bottom panel (iconSourceParent)
+        GameObject iconGO = Instantiate(mechanicIconPrefab, iconSourceParent, false);
+        var draggable = iconGO.GetComponent<DraggableMechanicIcon>();
+        if (draggable != null)
+        {
+            draggable.mechanicName = mechName;
+            // try to find Image field and assign sprite
+            if (draggable.iconImage != null && mechIcon != null) draggable.iconImage.sprite = mechIcon;
+            // ensure dragRoot is set
+            if (draggable.dragRoot == null && iconDragRoot != null) draggable.dragRoot = iconDragRoot;
+        }
+        else
+        {
+            // fallback: try to find an Image child to set sprite
+            var img = iconGO.GetComponentInChildren<Image>();
+            if (img != null && mechIcon != null) img.sprite = mechIcon;
+        }
+
+        // optional: give some animation/pop effect here (scale up, fade in), but keep minimal for jam
+    }
+
+    private void ClearMechanics()
+    {
+        if (dropZoneParent != null)
+        {
+            for (int i = dropZoneParent.childCount - 1; i >= 0; i--)
+            {
+                Destroy(dropZoneParent.GetChild(i).gameObject);
+            }
+        }
+        currentMechanicNames.Clear();
     }
 
     public void RemoveMechanic(GameObject listItem, string mechanicName)
     {
         if (listItem != null) Destroy(listItem);
         currentMechanicNames.Remove(mechanicName);
-    }
-
-    private void OnBuildButton()
-    {
-        // Оцениваем билд
-        string resultGame = buildManager.Evaluate(currentMechanicNames);
-
-        // Сразу после билда очищаем DropZone (по требованию)
-        ClearMechanics();
-
-        if (!string.IsNullOrEmpty(resultGame))
-        {
-            // Успешный билд — разблокируем игру в коллекции
-            collectionManager?.UnlockGame(resultGame);
-            StartCoroutine(ShowResultAndClose($"Build successful: {resultGame}", true));
-        }
-        else
-        {
-            StartCoroutine(ShowResultAndClose("Build failed", false));
-        }
     }
 
     private IEnumerator ShowResultAndClose(string message, bool success)
@@ -173,20 +233,6 @@ public class BuildUIController : MonoBehaviour
         Close();
         
         infoText.text = "InfoText";
-    }
-
-    // Удаляем все элементы в dropZoneParent и очищаем список
-    private void ClearMechanics()
-    {
-        if (dropZoneParent != null)
-        {
-            for (int i = dropZoneParent.childCount - 1; i >= 0; i--)
-            {
-                var child = dropZoneParent.GetChild(i).gameObject;
-                Destroy(child);
-            }
-        }
-        currentMechanicNames.Clear();
     }
 
     // (опционально) если другой код хочет принудительно очистить
