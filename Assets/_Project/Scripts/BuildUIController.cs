@@ -171,6 +171,8 @@ public class BuildUIController : MonoBehaviour
         }
 
         Close();
+        
+        infoText.text = "InfoText";
     }
 
     // Удаляем все элементы в dropZoneParent и очищаем список

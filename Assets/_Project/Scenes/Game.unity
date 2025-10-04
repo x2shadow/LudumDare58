@@ -543,7 +543,7 @@ MonoBehaviour:
   - gameName: Game_2
     lockImage: {fileID: 926035929}
     gameIconImage: {fileID: 1368034464}
-    gameSprite: {fileID: 21300000, guid: 12b597f4d2b9b664f90dbb8f7e128f54, type: 3}
+    gameSprite: {fileID: 21300000, guid: 6e4e2d5a2534796429a8fbfa50464a3d, type: 3}
 --- !u!4 &290622386
 Transform:
   m_ObjectHideFlags: 0
@@ -1159,7 +1159,7 @@ GameObject:
   - component: {fileID: 675801213}
   - component: {fileID: 675801215}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Button (Build)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1183,7 +1183,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 160, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &675801213
 MonoBehaviour:
@@ -3578,7 +3578,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1688922858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4368,7 +4368,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Build
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c9e7931f01b5e79498c80a98a49e697c, type: 2}
   m_sharedMaterial: {fileID: 2642699481754106607, guid: c9e7931f01b5e79498c80a98a49e697c,
@@ -5147,7 +5147,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 30}
+  m_SizeDelta: {x: 800, y: 30}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &8060009604005375746
 MonoBehaviour:
