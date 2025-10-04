@@ -292,13 +292,7 @@ public class PlayerController : MonoBehaviour
         if (context.performed && currentInteractable != null)
         {
             currentInteractable.Interact(this);
-            //Interact();
         }
-    }
-
-    private void Interact()
-    {
-        Debug.Log("Interact pressed");
     }
 
     private void OnFlashlight(InputAction.CallbackContext context)
