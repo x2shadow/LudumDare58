@@ -3,8 +3,10 @@ using System.Collections;
 
 public class SleepSpot : MonoBehaviour, IInteractable
 {
-    public Transform sleepCameraView; // необязательно
-    public float sleepDuration = 1f;
+    public float sleepDuration = 0.5f;
+    public float fadeDuration = 0.25f; // Длительность затемнения/разтемнения
+
+    private ScreenFader screenFader;
 
     public void Interact(PlayerController player)
     {
@@ -25,6 +27,8 @@ public class SleepSpot : MonoBehaviour, IInteractable
             return;
         }
 
+        if (screenFader == null) screenFader = FindObjectOfType<ScreenFader>();
+
         // если разрешение есть — разрешаем спать (и снимаем режим "только сон" после сна)
         StartCoroutine(DoSleepCoroutine(player));
     }
@@ -34,9 +38,12 @@ public class SleepSpot : MonoBehaviour, IInteractable
         // блокируем управление на время сна
         player.SetInputBlocked(true);
         // тут можно сделать подлёт камеры к sleepCameraView, проиграть анимацию и т.д.
+        yield return screenFader.FadeIn(fadeDuration);
 
         // ждём реального времени (не Time.timeScale)
         yield return new WaitForSecondsRealtime(sleepDuration);
+
+        yield return screenFader.FadeOut(fadeDuration);
 
         // после сна — снимаем специальный режим, чтобы игрок снова мог взаимодействовать нормально
         player.SetInteractionOnlySleepMode(false); // добавь этот метод в PlayerController если ещё нет
