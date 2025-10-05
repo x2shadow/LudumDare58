@@ -62,6 +62,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Дебаг")]
     public bool isDialogueActive;
+    public DialogueScript dialogueScript;
 
     [Header("Physics / Ground check")]
     public Transform groundCheck;
@@ -342,6 +343,7 @@ public class PlayerController : MonoBehaviour
             if (hold != null && hold.HasDisc && currentInteractable is PCTerminal)
             {
                 Debug.Log("You can't use the PC while holding a disc. Deposit it first.");
+                dialogueRunner.StartDialogue(dialogueScript, 0);
                 return;
             }
 
