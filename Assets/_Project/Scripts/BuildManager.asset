@@ -14,25 +14,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   validCombos:
   - mechanics:
-    - MechanicTest_1
-    - MechanicTest_1
+    - Gameplay
+    - Gameplay
     gameName: Game_1
     gameIcon: {fileID: 21300000, guid: 12b597f4d2b9b664f90dbb8f7e128f54, type: 3}
-    unlockMechanicName: Test
+    unlockMechanicName: Narrative
     unlockMechanicIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   - mechanics:
-    - MechanicTest_1
-    - MechanicTest_2
-    - MechanicTest_2
+    - Gameplay
+    - Narrative
     gameName: Game_2
     gameIcon: {fileID: 21300000, guid: 6e4e2d5a2534796429a8fbfa50464a3d, type: 3}
     unlockMechanicName: 
     unlockMechanicIcon: {fileID: 0}
   - mechanics:
-    - Test
-    - Test
-    - MechanicTest_2
+    - Gameplay
+    - Narrative
+    - Narrative
     gameName: Game_3
+    gameIcon: {fileID: 21300000, guid: 6e4e2d5a2534796429a8fbfa50464a3d, type: 3}
+    unlockMechanicName: Graphics
+    unlockMechanicIcon: {fileID: 0}
+  - mechanics:
+    - Gameplay
+    - Narrative
+    - Graphics
+    gameName: Game_4
+    gameIcon: {fileID: 21300000, guid: 6e4e2d5a2534796429a8fbfa50464a3d, type: 3}
+    unlockMechanicName: 
+    unlockMechanicIcon: {fileID: 0}
+  - mechanics:
+    - Graphics
+    - Graphics
+    - Graphics
+    gameName: Game_5
+    gameIcon: {fileID: 21300000, guid: 6e4e2d5a2534796429a8fbfa50464a3d, type: 3}
+    unlockMechanicName: Audio
+    unlockMechanicIcon: {fileID: 0}
+  - mechanics:
+    - Gameplay
+    - Narrative
+    - Graphics
+    - Audio
+    gameName: Game_6
     gameIcon: {fileID: 21300000, guid: 6e4e2d5a2534796429a8fbfa50464a3d, type: 3}
     unlockMechanicName: 
     unlockMechanicIcon: {fileID: 0}

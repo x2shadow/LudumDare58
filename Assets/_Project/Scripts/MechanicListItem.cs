@@ -1,10 +1,11 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class MechanicListItem : MonoBehaviour, IPointerClickHandler
 {
-    public Text label;
+    public TextMeshProUGUI label;
     private string mechanicName;
     private BuildUIController parentController;
 

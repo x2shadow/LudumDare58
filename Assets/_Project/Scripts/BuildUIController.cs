@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class BuildUIController : MonoBehaviour
 {
@@ -32,7 +33,7 @@ public class BuildUIController : MonoBehaviour
     [Header("Build")]
     public BuildManager buildManager;
     public Button buildButton;
-    public Text infoText;
+    public TextMeshProUGUI infoText;
 
     [Header("Collection")]
     public GameCollectionManager collectionManager; // ссылка на менеджер коллекции
