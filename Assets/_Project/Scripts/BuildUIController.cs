@@ -15,6 +15,7 @@ public class BuildUIController : MonoBehaviour
     public GameObject mechanicIconPrefab;
 
     [Header("References")]
+    public GameIdeaBoard gameIdeaBoard;
     public GameObject pcCanvas;
     public RectTransform iconDragRoot;
 
@@ -159,6 +160,9 @@ public class BuildUIController : MonoBehaviour
         {
             // разблокируем в коллекции
             bool newlyUnlocked = collectionManager?.UnlockGame(combo.gameName) ?? false;
+
+            // следующая идея
+            gameIdeaBoard?.OnBuildCompleted(combo.gameName);
 
             // если это первый раз и combo.unlockMechanicName задана — добавляем новую механику в нижнюю панель
             if (newlyUnlocked && !string.IsNullOrEmpty(combo.unlockMechanicName) && mechanicIconPrefab != null && iconSourceParent != null)
