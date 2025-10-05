@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,9 @@ public class GameCollectionManager : MonoBehaviour
 
     public BuildManager buildManager; // optional: чтобы можно было автозаполнить иконки на старте
 
+    // Событие — вызывается когда игра была успешно разблокирована (новая)
+    public event Action<string> OnGameUnlocked;
+
     private void Awake()
     {
         map = new Dictionary<string, GameSlot>();
@@ -37,7 +41,6 @@ public class GameCollectionManager : MonoBehaviour
 
     private void Start()
     {
-        // optional: pull icons from BuildManager combos
         if (buildManager != null)
         {
             foreach (var combo in buildManager.validCombos)
@@ -57,7 +60,10 @@ public class GameCollectionManager : MonoBehaviour
         if (!map.TryGetValue(gameName, out var slot))
         {
             Debug.LogWarning($"UnlockGame: нет слота для {gameName}");
-            return false;
+            // Даже если слота нет — считаем, что игра "разблокирована" логически, чтобы остальной код мог реагировать.
+            unlocked.Add(gameName);
+            OnGameUnlocked?.Invoke(gameName);
+            return true;
         }
 
         unlocked.Add(gameName);
@@ -68,7 +74,16 @@ public class GameCollectionManager : MonoBehaviour
             if (slot.gameSprite != null) slot.gameIconImage.sprite = slot.gameSprite;
             slot.gameIconImage.gameObject.SetActive(true);
         }
+
+        OnGameUnlocked?.Invoke(gameName);
         return true;
+    }
+
+    // Проверка: разблокирована ли игра
+    public bool IsUnlocked(string gameName)
+    {
+        if (string.IsNullOrEmpty(gameName)) return false;
+        return unlocked.Contains(gameName);
     }
 
     public void SetIconFor(string gameName, Sprite icon)

@@ -5810,6 +5810,7 @@ MonoBehaviour:
   allowAnyBuild: 0
   autoNumberTitles: 1
   startIndex: 0
+  collectionManager: {fileID: 290622385}
 --- !u!1 &2050288546
 GameObject:
   m_ObjectHideFlags: 0

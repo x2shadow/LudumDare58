@@ -9,13 +9,10 @@ public class GameIdeaBoard : MonoBehaviour
     [Serializable]
     public class Idea
     {
-        [Tooltip("Если оставить пустым — заголовок будет генерироваться как 'Game Idea N'")]
         public string title;
-
         [TextArea(3, 10)]
         public string description;
-
-        [Tooltip("Если указано — эта идея переключится на следующую только когда пользователь соберёт игру с этим именем.\nОставьте пустым, чтобы любое успешное создание билда переключало идею (если allowAnyBuild=true).")]
+        [Tooltip("Если задано — эта идея считается 'связанной' с игрой с таким именем")]
         public string unlockGameName;
     }
 
@@ -27,73 +24,191 @@ public class GameIdeaBoard : MonoBehaviour
     [SerializeField] private List<Idea> ideas = new List<Idea>();
 
     [Header("Behaviour")]
-    [Tooltip("Если true — любое успешное создание билда переключает на следующую идею (если unlockGameName не задан).")]
     [SerializeField] private bool allowAnyBuild = true;
-
-    [Tooltip("Если true — заголовки будут 'Game Idea 1/2/3' независимо от поля title в Idea.")]
     [SerializeField] private bool autoNumberTitles = true;
+    [SerializeField] private int startIndex = 0;
 
-    [SerializeField] private int startIndex = 0; // для дебага/настроек
+    [Header("Integration")]
+    [Tooltip("Ссылка на GameCollectionManager — используется чтобы пропускать уже разблокированные игры")]
+    public GameCollectionManager collectionManager;
 
     private int currentIndex = 0;
 
     private void Awake()
     {
-        // Ensure TMP refs are set
         if (titleText == null || bodyText == null)
             Debug.LogWarning($"{nameof(GameIdeaBoard)}: assign titleText and bodyText in inspector.");
 
-        currentIndex = Mathf.Clamp(startIndex, 0, Math.Max(0, ideas.Count - 1));
+        // Подписываемся на событие разблокировки (если доступно)
+        if (collectionManager != null)
+        {
+            collectionManager.OnGameUnlocked += OnExternalGameUnlocked;
+        }
+
+        // стартовый индекс: первый неразблокированный (если есть), иначе startIndex
+        currentIndex = FindFirstAvailableIndex();
+        if (currentIndex == -1) currentIndex = 0; // если всё заблокировано и нет критериев — просто 0
         RefreshUI();
     }
 
-    /// <summary>
-    /// Должно вызываться, когда билд успешно собран.
-    /// builtGameName — название игры, которое возвращает BuildManager (MechanicCombo.gameName).
-    /// </summary>
+    private void OnDestroy()
+    {
+        if (collectionManager != null)
+            collectionManager.OnGameUnlocked -= OnExternalGameUnlocked;
+    }
+
+    // Это вызывается извне, когда билд успешно собран (buildManager возвращает combo.gameName)
     public void OnBuildCompleted(string builtGameName)
     {
-        if (ideas == null || ideas.Count == 0) return;
+        // Всегда синхронизируемся с коллекцией: если игрок разблокировал игру, пропускаем уже показанные
+        SyncToCollection();
 
-        // Если текущая идея имеет требование unlockGameName — сравниваем
-        var curr = ideas[currentIndex];
-        bool shouldAdvance = false;
-
-        if (!string.IsNullOrEmpty(curr.unlockGameName))
+        // Если текущая идея требует конкретного имени, и имя совпало — продвигаемся
+        if (ideas != null && currentIndex >= 0 && currentIndex < ideas.Count)
         {
-            if (string.Equals(curr.unlockGameName, builtGameName, StringComparison.Ordinal))
-                shouldAdvance = true;
+            var curr = ideas[currentIndex];
+            bool shouldAdvance = false;
+
+            if (!string.IsNullOrEmpty(curr.unlockGameName))
+            {
+                if (string.Equals(curr.unlockGameName, builtGameName, StringComparison.Ordinal))
+                    shouldAdvance = true;
+            }
+            else
+            {
+                // если требование не задано — опираемся на allowAnyBuild
+                shouldAdvance = allowAnyBuild;
+            }
+
+            if (shouldAdvance)
+            {
+                AdvanceToNext();
+            }
         }
         else
         {
-            // если требование не задано — полагаемся на allowAnyBuild
-            shouldAdvance = allowAnyBuild;
-        }
-
-        if (shouldAdvance)
-        {
-            AdvanceToNext();
+            // если currentIndex вне диапазона — попробуем синхронизировать и обновить UI
+            SyncToCollection();
         }
     }
 
-    /// <summary>Перейти к следующей идее (если есть)</summary>
+    // Если кто-то разблокировал игру (через GameCollectionManager), приходим сюда и пересчитываем какую идею показывать
+    private void OnExternalGameUnlocked(string gameName)
+    {
+        // Пересчитать индекс: пропускаем идеи, связанные с уже разблокированными играми
+        SyncToCollection();
+    }
+
+    // Нахождение первого индекса идеи, которая ещё НЕ ассоциирована с уже разблокированной игрой
+    // Возвращает -1 если не найдено (все идеи либо не имеют unlockGameName, либо их unlockGameName уже разблокированы).
+    private int FindFirstAvailableIndex()
+    {
+        if (ideas == null || ideas.Count == 0) return -1;
+
+        for (int i = 0; i < ideas.Count; i++)
+        {
+            var idea = ideas[i];
+            if (string.IsNullOrEmpty(idea.unlockGameName))
+            {
+                // у идеи нет привязки к имени игры => считаем её показанной/доступной (не пропускаем)
+                // Возвращаем её как первая доступная
+                return i;
+            }
+            else
+            {
+                // есть привязка — проверяем, разблокирована ли соответствующая игра
+                if (collectionManager != null)
+                {
+                    if (collectionManager.IsUnlocked(idea.unlockGameName))
+                    {
+                        // уже разблокирована — пропускаем
+                        continue;
+                    }
+                    else
+                    {
+                        // ещё НЕ разблокирована — показываем эту идею
+                        return i;
+                    }
+                }
+                else
+                {
+                    // Нет collectionManager — не можем проверить, поэтому считаем идею доступной
+                    return i;
+                }
+            }
+        }
+
+        // ничего не найдено
+        return -1;
+    }
+
+    // Подгоняем currentIndex к первой непоказанной/неразблокированной идее
+    private void SyncToCollection()
+    {
+        int idx = FindFirstAvailableIndex();
+        if (idx == -1)
+        {
+            // Если ничего не доступно — выставим special state (-1) и RefreshUI займетсь этим случаем.
+            currentIndex = -1;
+        }
+        else
+        {
+            currentIndex = idx;
+        }
+        RefreshUI();
+    }
+
     public void AdvanceToNext()
     {
-        if (ideas == null || ideas.Count == 0) return;
-        if (currentIndex < ideas.Count - 1)
+        if (ideas == null || ideas.Count == 0)
         {
-            currentIndex++;
+            currentIndex = -1;
             RefreshUI();
-            // тут можно добавить эффект (звук/анимация) при переключении
+            return;
+        }
+
+        // сдвигаем вперёд пока не найдём первый непоказанный/неразблокированный
+        int start = (currentIndex < 0) ? 0 : currentIndex + 1;
+        int found = -1;
+        for (int i = start; i < ideas.Count; i++)
+        {
+            var idea = ideas[i];
+            if (string.IsNullOrEmpty(idea.unlockGameName))
+            {
+                found = i;
+                break;
+            }
+            else
+            {
+                if (collectionManager != null)
+                {
+                    if (!collectionManager.IsUnlocked(idea.unlockGameName))
+                    {
+                        found = i;
+                        break;
+                    }
+                }
+                else
+                {
+                    found = i;
+                    break;
+                }
+            }
+        }
+
+        if (found == -1)
+        {
+            // дошли до конца — помечаем, что идей нет
+            currentIndex = -1;
         }
         else
         {
-            // опционально: если дошли до конца — ничего не делаем или сбрасываем
-            Debug.Log($"{name}: reached last idea (index {currentIndex}).");
+            currentIndex = found;
         }
+
+        RefreshUI();
     }
 
-    /// <summary>Принудительно установить индекс (например для редактора)</summary>
     public void SetIndex(int idx)
     {
         if (ideas == null || ideas.Count == 0) return;
@@ -105,8 +220,16 @@ public class GameIdeaBoard : MonoBehaviour
     {
         if (ideas == null || ideas.Count == 0)
         {
-            if (titleText != null) titleText.text = "No Game Ideas";
-            if (bodyText  != null) bodyText.text  = "";
+            if (titleText != null) titleText.text = "Game Idea ???";
+            if (bodyText  != null) bodyText.text  = "???";
+            return;
+        }
+
+        if (currentIndex < 0 || currentIndex >= ideas.Count)
+        {
+            // специальный случай — идей больше нет для показа
+            if (titleText != null) titleText.text = "Game Idea ???";
+            if (bodyText != null) bodyText.text = "- ???\n- ???\n- ???";
             return;
         }
 
@@ -125,13 +248,11 @@ public class GameIdeaBoard : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    // для удобства: показать текущую идею прямо в редакторе при изменении
     private void OnValidate()
     {
         if (!Application.isPlaying)
         {
             currentIndex = Mathf.Clamp(startIndex, 0, Math.Max(0, ideas.Count - 1));
-            // Delay refresh to avoid errors when recompiling; use EditorApplication.delayCall if needed.
             UnityEditor.EditorApplication.delayCall += () =>
             {
                 if (this != null) RefreshUI();
