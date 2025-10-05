@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour
 
     private bool isInputBlocked = false;
     private bool interactionsBlocked = false;
+    private bool pcInteractionBlocked = false;
     private bool onlyAllowSleep = false; // если true — можно взаимодействовать только со SleepSpot
 
     [Header("Дебаг")]
@@ -79,6 +80,7 @@ public class PlayerController : MonoBehaviour
     public DialogueRunner dialogueRunner;
 
     private IInteractable currentInteractable;
+    private InteractionIndicatorManager indicatorManager;
 
     [Header("Frame Rate Settings")]
     public int targetFrameRate = 60;
@@ -117,6 +119,8 @@ public class PlayerController : MonoBehaviour
         cameraInitialLocalPos = CinemachineCameraTarget.transform.localPosition;
         float heightDiff = Mathf.Max(0f, standingHeight - crouchHeight);
         cameraCrouchLocalPos = cameraInitialLocalPos - new Vector3(0f, heightDiff * 0.5f, 0f);
+
+        indicatorManager = InteractionIndicatorManager.Instance;
     }
 
     void Start()
@@ -146,8 +150,11 @@ public class PlayerController : MonoBehaviour
         inputActions.Player.Pause.performed += OnPause;
 
         inputActions.Player.Sprint.performed += OnSprintPerfomed;
-        inputActions.Player.Sprint.canceled  += OnSprintCanceled;
+        inputActions.Player.Sprint.canceled += OnSprintCanceled;
         inputActions.Player.Crouch.performed += OnCrouch;
+        
+        if (InteractionIndicatorManager.Instance != null)
+        InteractionIndicatorManager.Instance.OnSuppressionChanged += OnIndicatorSuppressionChanged;
     }
 
     private void OnDisable()
@@ -162,10 +169,13 @@ public class PlayerController : MonoBehaviour
         inputActions.Player.Interact.performed -= OnInteract;
         inputActions.Player.Flashlight.performed -= OnFlashlight;
         inputActions.Player.Pause.performed -= OnPause;
-        
+
         inputActions.Player.Sprint.performed -= OnSprintPerfomed;
-        inputActions.Player.Sprint.canceled  -= OnSprintCanceled;
+        inputActions.Player.Sprint.canceled -= OnSprintCanceled;
         inputActions.Player.Crouch.performed -= OnCrouch;
+        
+        if (InteractionIndicatorManager.Instance != null)
+        InteractionIndicatorManager.Instance.OnSuppressionChanged -= OnIndicatorSuppressionChanged;
     }
 
     private void Update()
@@ -269,8 +279,25 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawWireSphere(groundCheck.position, groundDistance);
     }
 
+    private void OnIndicatorSuppressionChanged(bool suppressed)
+    {
+        // если suppression снят — обновим луч/иконку сразу
+        // Если suppressed==true, возможно нужно скрыть подсказку немедленно
+        // используем HandleInteractionRay() — оно отключит или включит UI правильно
+        HandleInteractionRay();
+    }
+
     private void HandleInteractionRay()
     {
+        //Debug.Log($"Suppressed={InteractionIndicatorManager.Instance?.IsSuppressed}, HasDisc={GetComponent<PlayerHoldItem>()?.HasDisc}, onlyAllowSleep={onlyAllowSleep}, pcInteractionBlocked={pcInteractionBlocked}, isInputBlocked={isInputBlocked}");
+
+        if (InteractionIndicatorManager.Instance != null && InteractionIndicatorManager.Instance.IsSuppressed)
+        {
+            interactPromptUI.SetActive(false);
+            currentInteractable = null;
+            return;
+        }
+
         currentInteractable = null;
         interactPromptUI.SetActive(false);
 
@@ -283,8 +310,25 @@ public class PlayerController : MonoBehaviour
             if (currentInteractable != null)
             {
                 if (currentInteractable.GetUsed()) return;
+
+                // Если глобально запрещено показывать подсказку — не показываем
+                if (InteractionIndicatorManager.Instance != null && InteractionIndicatorManager.Instance.IsSuppressed)
+                {
+                    interactPromptUI.SetActive(false);
+                }
+                else
+                {
+                    interactPromptUI.SetActive(true);
+                }
+            }
+
+            /* Мой старый код
+            if (currentInteractable != null)
+            {
+                if (currentInteractable.GetUsed()) return;
                 interactPromptUI.SetActive(true);
             }
+            */
         }
     }
 
@@ -297,25 +341,18 @@ public class PlayerController : MonoBehaviour
             var hold = GetComponent<PlayerHoldItem>();
             if (hold != null && hold.HasDisc && currentInteractable is PCTerminal)
             {
-                // можно показать подсказку в UI, что нужно сначала сдать диск
                 Debug.Log("You can't use the PC while holding a disc. Deposit it first.");
                 return;
             }
 
-            // Если в режиме 'only allow sleep' — разрешаем интеракт только со SleepSpot
-            if (onlyAllowSleep)
+            // Если ПК заблокирован (после сдачи сюжетного диска) — запретим использовать именно ПК
+            if (pcInteractionBlocked && currentInteractable is PCTerminal)
             {
-                if (currentInteractable is SleepSpot)
-                {
-                    currentInteractable.Interact(this);
-                }
-                else
-                {
-                    Debug.Log("You must sleep before doing anything else.");
-                }
+                Debug.Log("PC is locked right now. You must sleep before using it.");
                 return;
             }
 
+            // обычный интеракт
             currentInteractable.Interact(this);
         }
     }
@@ -410,6 +447,13 @@ public class PlayerController : MonoBehaviour
             moveInput = Vector2.zero;
             lookInput = Vector2.zero;
         }
+
+        // синхронизируем с индикатором — если ввод заблокирован, скрываем подсказку
+        if (InteractionIndicatorManager.Instance != null)
+        {
+            if (blocked) InteractionIndicatorManager.Instance.Suppress();
+            else InteractionIndicatorManager.Instance.Release();
+        }
     }
 
     public void SetInputBlocked2(bool blocked)
@@ -427,6 +471,12 @@ public class PlayerController : MonoBehaviour
         onlyAllowSleep = onlySleep;
         // оставляем движение/смотреть — но при попытке Interact проверяем флаг
     }
+
+    public void SetPCBlocked(bool blocked)
+    {
+        pcInteractionBlocked = blocked;
+    }
+    public bool IsPCBlocked() => pcInteractionBlocked;
     
     private void OnSprintPerfomed(InputAction.CallbackContext ctx)
     {

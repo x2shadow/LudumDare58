@@ -46,7 +46,7 @@ public class SleepSpot : MonoBehaviour, IInteractable
         yield return screenFader.FadeOut(fadeDuration);
 
         // после сна — снимаем специальный режим, чтобы игрок снова мог взаимодействовать нормально
-        player.SetInteractionOnlySleepMode(false); // добавь этот метод в PlayerController если ещё нет
+        player.SetPCBlocked(false);
         player.SetInputBlocked(false);
 
         Debug.Log("You slept.");

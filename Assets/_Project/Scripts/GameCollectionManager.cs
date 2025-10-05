@@ -27,6 +27,8 @@ public class GameCollectionManager : MonoBehaviour
     private int pendingSleepPermits = 0; // сколько раз игрок ещё может поспать (разрешения, полученные сдачей сюжетных дисков)
     public event Action<int> OnStorySubmitted; // передаёт новый count
 
+    private HashSet<string> submittedStoryGames = new HashSet<string>();
+
     private void Awake()
     {
         map = new Dictionary<string, GameSlot>();
@@ -98,9 +100,19 @@ public class GameCollectionManager : MonoBehaviour
         if (slot.gameIconImage != null) slot.gameIconImage.sprite = icon;
     }
 
-    public void RecordStoryDiscSubmitted(string gameName)
+    public bool RecordStoryDiscSubmitted(string gameName)
     {
+        if (string.IsNullOrEmpty(gameName)) return false;
+
+        if (submittedStoryGames.Contains(gameName))
+        {
+            // уже сдали этот сюжетный диск — игнорируем
+            Debug.Log($"Story disc '{gameName}' already submitted — ignoring.");
+            return false;
+        }
+
         // защита: уже может быть разблокировано — но считаем сданным
+        submittedStoryGames.Add(gameName);
         storySubmittedCount++;
         pendingSleepPermits++;
         OnStorySubmitted?.Invoke(storySubmittedCount);
@@ -110,6 +122,9 @@ public class GameCollectionManager : MonoBehaviour
         {
             EndGameManager.Instance?.EndGame(); // см. Singleton EndGameManager ниже
         }
+
+        Debug.Log($"Story disc '{gameName}' recorded. total story submitted: {storySubmittedCount}");
+        return true;
     }
 
     public bool ConsumeSleepPermit()

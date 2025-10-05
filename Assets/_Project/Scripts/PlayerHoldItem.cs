@@ -24,6 +24,9 @@ public class PlayerHoldItem : MonoBehaviour
         heldDisc = heldGO.GetComponent<GameDisc>();
         if (heldDisc != null)
             heldDisc.Setup(gameName, isStory, icon, dialogueScript);
+
+        // Костыль подсказки
+        if (InteractionIndicatorManager.Instance != null) InteractionIndicatorManager.Instance.ResetAll();
     }
 
     // Удалить диск (после сдачи)

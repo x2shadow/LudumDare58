@@ -28,6 +28,8 @@ public class DraggableMechanicIcon : MonoBehaviour, IBeginDragHandler, IDragHand
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        //Cursor.visible = false;
+
         // ensure dragRoot
         if (dragRoot == null)
         {
@@ -70,10 +72,15 @@ public class DraggableMechanicIcon : MonoBehaviour, IBeginDragHandler, IDragHand
     {
         if (draggingObj == null) return;
         UpdateDraggingPosition(eventData);
+
+        // Скрыть подсказку пока перетаскиваем
+        if (InteractionIndicatorManager.Instance != null) InteractionIndicatorManager.Instance.Suppress();
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        //Cursor.visible = true;
+
         // restore original visual
         myCanvasGroup.alpha = 1f;
         myCanvasGroup.blocksRaycasts = true;
@@ -85,6 +92,9 @@ public class DraggableMechanicIcon : MonoBehaviour, IBeginDragHandler, IDragHand
             draggingRect = null;
             draggingCanvasGroup = null;
         }
+
+        // вернуть подсказку
+        if (InteractionIndicatorManager.Instance != null) InteractionIndicatorManager.Instance.Release();
     }
 
     private void UpdateDraggingPosition(PointerEventData eventData)

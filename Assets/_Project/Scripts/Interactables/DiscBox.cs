@@ -27,19 +27,6 @@ public class DiscBox : MonoBehaviour, IInteractable
         // приём диска: обновляем коллекцию
         bool newlyUnlocked = collectionManager?.UnlockGame(disc.gameName) ?? false;
 
-        // если сюжетный — помечаем и блокируем взаимодействия кроме сна
-        if (disc.isStory)
-        {
-            // флаг у игрока: может только идти спать
-            player.SetInteractionOnlySleepMode(true); // ниже опишем метод в PlayerController
-        }
-
-        // если есть диалог
-        if (disc.dialogueScript)
-        {
-            dialogueRunner.StartDialogue(disc.dialogueScript, 0);
-        }
-
         // визуально положим диск в коробку (опционально)
         if (depositPoint != null && hold.GetHeldGameObject() != null)
         {
@@ -57,10 +44,28 @@ public class DiscBox : MonoBehaviour, IInteractable
             hold.RemoveHeldDisc(); // либо не удалять вовсе — тут выбор дизайна
         }
 
-        // Сообщаем collectionManager, что был сдан сюжетный диск (если он сюжетный)
+        // Если дисk сюжетный - регистрируем сдачу, но только если это ПЕРВАЯ сдача данного диска
         if (disc.isStory)
         {
-            collectionManager.RecordStoryDiscSubmitted(disc.gameName);
+            bool firstTime = collectionManager.RecordStoryDiscSubmitted(disc.gameName);
+            if (firstTime)
+            {
+                // только при первой сдаче даём игроку блокировку ПК до следующего сна
+                player.SetPCBlocked(true);
+                // (не даём "onlyAllowSleep", игрок может взаимодействовать со всем кроме ПК)
+                if (disc.dialogueScript) dialogueRunner.StartDialogue(disc.dialogueScript, 0);
+            }
+            else
+            {
+                // повторная сдача — не меняем сюжет и не даём ещё один permit
+                Debug.Log("Story disc already submitted before — not advancing story or giving extra sleep permit.");
+            }
+        }
+
+        // если есть диалог
+        if (disc.dialogueScript && !disc.isStory)
+        {
+            dialogueRunner.StartDialogue(disc.dialogueScript, 0);
         }
 
         // если это была 6-я сдача — collectionManager сам вызовет EndGame

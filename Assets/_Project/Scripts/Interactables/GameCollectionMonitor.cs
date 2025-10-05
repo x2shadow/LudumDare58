@@ -27,8 +27,8 @@ public class GameCollectionMonitor : MonoBehaviour, IInteractable
         originalLocalRot = cinemachineTarget.localRotation;
 
         playerController.SetInputBlocked(true);
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        //Cursor.lockState = CursorLockMode.None;
+        //Cursor.visible = true;
 
         StartCoroutine(DoMonitorView());
     }
