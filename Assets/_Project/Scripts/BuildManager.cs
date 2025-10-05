@@ -27,6 +27,13 @@ public class MechanicCombo
     public string gameName;
     public Sprite gameIcon;
 
+    // в MechanicCombo (BuildManager)
+    [Header("Disc output")]
+    public bool isStoryDisc = false;        // является ли собранная игра сюжетным диском
+    public Sprite discIcon;                // иконка/спрайт диска (опционально)
+    public GameObject discPrefab;          // (опционально) prefab диска, если хочешь разный внешний вид
+
+
     [Header("Unlock a new mechanic when this game is built for the first time")]
     [Tooltip("Имя механики, которое появится в нижней панели")]
     public string unlockMechanicName;

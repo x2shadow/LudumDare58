@@ -14,6 +14,7 @@ public class BuildUIController : MonoBehaviour
     public Transform iconSourceParent;
     [Tooltip("prefab иконки механики (тот же, что внизу)")]
     public GameObject mechanicIconPrefab;
+    public GameObject defaultGameDiscPrefab;
 
     [Header("References")]
     public GameIdeaBoard gameIdeaBoard;
@@ -159,17 +160,29 @@ public class BuildUIController : MonoBehaviour
 
         if (combo != null)
         {
+
+            // получаем prefab диска: предпочтительно взять combo.discPrefab, иначе глобальный prefab
+            GameObject discPrefabToSpawn = combo.discPrefab != null ? combo.discPrefab : defaultGameDiscPrefab; 
+            // выдаём игроку диск
+            var hold = playerController.GetComponent<PlayerHoldItem>();
+            if (hold != null)
+            {
+                hold.PickupDisc(discPrefabToSpawn, combo.gameName, combo.isStoryDisc, combo.gameIcon);
+            }
+
             // разблокируем в коллекции
-            bool newlyUnlocked = collectionManager?.UnlockGame(combo.gameName) ?? false;
+            //bool newlyUnlocked = collectionManager?.UnlockGame(combo.gameName) ?? false;
 
             // следующая идея
             gameIdeaBoard?.OnBuildCompleted(combo.gameName);
 
+            /*
             // если это первый раз и combo.unlockMechanicName задана — добавляем новую механику в нижнюю панель
             if (newlyUnlocked && !string.IsNullOrEmpty(combo.unlockMechanicName) && mechanicIconPrefab != null && iconSourceParent != null)
             {
                 RevealNewMechanic(combo.unlockMechanicName, combo.unlockMechanicIcon);
             }
+            */
 
             StartCoroutine(ShowResultAndClose($"Build successful: {combo.gameName}", true));
         }

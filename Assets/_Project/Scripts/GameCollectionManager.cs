@@ -23,6 +23,9 @@ public class GameCollectionManager : MonoBehaviour
     // Событие — вызывается когда игра была успешно разблокирована (новая)
     public event Action<string> OnGameUnlocked;
 
+    public int storySubmittedCount = 0;
+    public event Action<int> OnStorySubmitted; // передаёт новый count
+
     private void Awake()
     {
         map = new Dictionary<string, GameSlot>();
@@ -92,5 +95,18 @@ public class GameCollectionManager : MonoBehaviour
         if (!map.TryGetValue(gameName, out var slot)) return;
         slot.gameSprite = icon;
         if (slot.gameIconImage != null) slot.gameIconImage.sprite = icon;
+    }
+
+    public void RecordStoryDiscSubmitted(string gameName)
+    {
+        // защита: уже может быть разблокировано — но считаем сданным
+        storySubmittedCount++;
+        OnStorySubmitted?.Invoke(storySubmittedCount);
+
+        // Если достигли 6 — конец игры
+        if (storySubmittedCount >= 6)
+        {
+            EndGameManager.Instance?.EndGame(); // см. Singleton EndGameManager ниже
+        }
     }
 }

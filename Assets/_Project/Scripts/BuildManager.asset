@@ -18,6 +18,10 @@ MonoBehaviour:
     - Gameplay
     gameName: Game_1
     gameIcon: {fileID: 21300000, guid: 12b597f4d2b9b664f90dbb8f7e128f54, type: 3}
+    isStoryDisc: 1
+    discIcon: {fileID: 21300000, guid: 12b597f4d2b9b664f90dbb8f7e128f54, type: 3}
+    discPrefab: {fileID: 6454716354858174482, guid: 70225403294dd49478b45edafa9ca0b8,
+      type: 3}
     unlockMechanicName: Narrative
     unlockMechanicIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   - mechanics:
@@ -25,6 +29,9 @@ MonoBehaviour:
     - Narrative
     gameName: Game_2
     gameIcon: {fileID: 21300000, guid: 6e4e2d5a2534796429a8fbfa50464a3d, type: 3}
+    isStoryDisc: 1
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
     unlockMechanicName: 
     unlockMechanicIcon: {fileID: 0}
   - mechanics:
@@ -33,6 +40,9 @@ MonoBehaviour:
     - Narrative
     gameName: Game_3
     gameIcon: {fileID: 21300000, guid: 6e4e2d5a2534796429a8fbfa50464a3d, type: 3}
+    isStoryDisc: 1
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
     unlockMechanicName: Graphics
     unlockMechanicIcon: {fileID: 0}
   - mechanics:
@@ -41,6 +51,9 @@ MonoBehaviour:
     - Graphics
     gameName: Game_4
     gameIcon: {fileID: 21300000, guid: 6e4e2d5a2534796429a8fbfa50464a3d, type: 3}
+    isStoryDisc: 1
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
     unlockMechanicName: 
     unlockMechanicIcon: {fileID: 0}
   - mechanics:
@@ -49,6 +62,9 @@ MonoBehaviour:
     - Graphics
     gameName: Game_5
     gameIcon: {fileID: 21300000, guid: 6e4e2d5a2534796429a8fbfa50464a3d, type: 3}
+    isStoryDisc: 1
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
     unlockMechanicName: Audio
     unlockMechanicIcon: {fileID: 0}
   - mechanics:
@@ -58,5 +74,19 @@ MonoBehaviour:
     - Audio
     gameName: Game_6
     gameIcon: {fileID: 21300000, guid: 6e4e2d5a2534796429a8fbfa50464a3d, type: 3}
+    isStoryDisc: 1
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
+    unlockMechanicName: 
+    unlockMechanicIcon: {fileID: 0}
+  - mechanics:
+    - Gameplay
+    - Gameplay
+    - Gameplay
+    gameName: Game_7
+    gameIcon: {fileID: 21300000, guid: 6e4e2d5a2534796429a8fbfa50464a3d, type: 3}
+    isStoryDisc: 0
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
     unlockMechanicName: 
     unlockMechanicIcon: {fileID: 0}

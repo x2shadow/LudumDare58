@@ -56,6 +56,8 @@ public class PlayerController : MonoBehaviour
     private bool isPaused = false;
 
     private bool isInputBlocked = false;
+    private bool interactionsBlocked = false;
+    private bool onlyAllowSleep = false; // если true — можно взаимодействовать только со SleepSpot
 
     [Header("Дебаг")]
     public bool isDialogueActive;
@@ -289,8 +291,24 @@ public class PlayerController : MonoBehaviour
     private void OnInteract(InputAction.CallbackContext context)
     {
         if (isInputBlocked) return;
+        if (interactionsBlocked) return;
         if (context.performed && currentInteractable != null)
         {
+            if (onlyAllowSleep)
+            {
+                // предположим SleepSpot реализует ISleepSpot интерфейс или имеет компонент SleepSpot
+                if (currentInteractable is SleepSpot) // или check by GetComponent<SleepSpot>()
+                {
+                    currentInteractable.Interact(this);
+                }
+                else
+                {
+                    // нельзя ничего делать — возможно показать подсказку
+                    Debug.Log("You must sleep before doing anything else.");
+                }
+                return;
+            }
+            
             currentInteractable.Interact(this);
         }
     }
@@ -390,6 +408,17 @@ public class PlayerController : MonoBehaviour
     public void SetInputBlocked2(bool blocked)
     {
         isInputBlocked = blocked;
+    }
+
+    public void SetInteractionBlocked(bool blocked)
+    {
+        interactionsBlocked = blocked;
+    }
+
+    public void SetInteractionOnlySleepMode(bool onlySleep)
+    {
+        onlyAllowSleep = onlySleep;
+        // оставляем движение/смотреть — но при попытке Interact проверяем флаг
     }
     
     private void OnSprintPerfomed(InputAction.CallbackContext ctx)
