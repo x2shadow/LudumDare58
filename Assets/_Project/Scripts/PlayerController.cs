@@ -62,7 +62,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Дебаг")]
     public bool isDialogueActive;
-    public DialogueScript dialogueScript;
+    public DialogueScript dialogueCantUsePC;
+    public DialogueScript dialogueGottaSleep;
 
     [Header("Physics / Ground check")]
     public Transform groundCheck;
@@ -343,7 +344,7 @@ public class PlayerController : MonoBehaviour
             if (hold != null && hold.HasDisc && currentInteractable is PCTerminal)
             {
                 Debug.Log("You can't use the PC while holding a disc. Deposit it first.");
-                dialogueRunner.StartDialogue(dialogueScript, 0);
+                dialogueRunner.StartDialogue(dialogueCantUsePC, 0);
                 return;
             }
 
@@ -351,6 +352,7 @@ public class PlayerController : MonoBehaviour
             if (pcInteractionBlocked && currentInteractable is PCTerminal)
             {
                 Debug.Log("PC is locked right now. You must sleep before using it.");
+                dialogueRunner.StartDialogue(dialogueGottaSleep, 0);
                 return;
             }
 

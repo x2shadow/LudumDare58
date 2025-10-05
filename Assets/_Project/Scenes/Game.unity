@@ -15,9 +15,9 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
   m_Fog: 0
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_FogColor: {r: 0, g: 0, b: 0, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.01
+  m_FogDensity: 0.05
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
@@ -25,7 +25,7 @@ RenderSettings:
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 0
-  m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
+  m_SubtractiveShadowColor: {r: 0, g: 0, b: 0, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
@@ -10717,6 +10717,8 @@ MonoBehaviour:
   playerCameraShake: {fileID: 0}
   pauseCanvas: {fileID: 1223857497}
   isDialogueActive: 0
+  dialogueCantUsePC: {fileID: 11400000, guid: fd7a4546735b3074698c6d01cef1a952, type: 2}
+  dialogueGottaSleep: {fileID: 11400000, guid: 56cb201eac418114c8d83a1103da8b2c, type: 2}
   groundCheck: {fileID: 854779193}
   groundDistance: 0.18
   groundMask:
