@@ -47,8 +47,8 @@ public class AudioManager : MonoBehaviour
     void Initialize()
     {
         // Загрузка сохраненных настроек громкости
-        masterMusicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
-        masterSoundVolume = PlayerPrefs.GetFloat("SoundVolume", 1f);
+        masterMusicVolume = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
+        masterSoundVolume = PlayerPrefs.GetFloat("SoundVolume", 0.5f);
 
         // Инициализация пула источников звука
         for (int i = 0; i < initialPoolSize; i++)
