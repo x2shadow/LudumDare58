@@ -167,7 +167,7 @@ public class BuildUIController : MonoBehaviour
             var hold = playerController.GetComponent<PlayerHoldItem>();
             if (hold != null)
             {
-                hold.PickupDisc(discPrefabToSpawn, combo.gameName, combo.isStoryDisc, combo.gameIcon);
+                hold.PickupDisc(discPrefabToSpawn, combo.gameName, combo.isStoryDisc, combo.gameIcon, combo.dialogueScript);
             }
 
             // разблокируем в коллекции
@@ -192,7 +192,7 @@ public class BuildUIController : MonoBehaviour
         }
     }
 
-    private void RevealNewMechanic(string mechName, Sprite mechIcon)
+    public void RevealNewMechanic(string mechName, Sprite mechIcon)
     {
         // Instantiate icon prefab in the bottom panel (iconSourceParent)
         GameObject iconGO = Instantiate(mechanicIconPrefab, iconSourceParent, false);

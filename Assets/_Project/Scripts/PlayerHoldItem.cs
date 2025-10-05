@@ -12,7 +12,7 @@ public class PlayerHoldItem : MonoBehaviour
     public GameDisc GetHeldDisc() => heldDisc;
 
     // Взять диск: instantiate prefab и прикрепить
-    public void PickupDisc(GameObject discPrefab, string gameName, bool isStory, Sprite icon = null)
+    public void PickupDisc(GameObject discPrefab, string gameName, bool isStory, Sprite icon = null, DialogueScript dialogueScript = null)
     {
         if (heldGO != null) Destroy(heldGO);
 
@@ -23,7 +23,7 @@ public class PlayerHoldItem : MonoBehaviour
 
         heldDisc = heldGO.GetComponent<GameDisc>();
         if (heldDisc != null)
-            heldDisc.Setup(gameName, isStory, icon);
+            heldDisc.Setup(gameName, isStory, icon, dialogueScript);
     }
 
     // Удалить диск (после сдачи)

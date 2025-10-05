@@ -18,6 +18,17 @@ public class BuildManager : ScriptableObject
         }
         return null;
     }
+
+    public MechanicCombo GetComboByGameName(string gameName)
+    {
+        if (string.IsNullOrEmpty(gameName)) return null;
+        foreach (var combo in validCombos)
+        {
+            if (string.Equals(combo.gameName, gameName, System.StringComparison.Ordinal))
+                return combo;
+        }
+        return null;
+    }
 }
 
 [System.Serializable]
@@ -32,6 +43,7 @@ public class MechanicCombo
     public bool isStoryDisc = false;        // является ли собранная игра сюжетным диском
     public Sprite discIcon;                // иконка/спрайт диска (опционально)
     public GameObject discPrefab;          // (опционально) prefab диска, если хочешь разный внешний вид
+    public DialogueScript dialogueScript;
 
 
     [Header("Unlock a new mechanic when this game is built for the first time")]

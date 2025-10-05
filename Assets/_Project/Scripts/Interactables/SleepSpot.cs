@@ -1,41 +1,49 @@
 using UnityEngine;
+using System.Collections;
 
 public class SleepSpot : MonoBehaviour, IInteractable
 {
-    public Transform sleepCameraView; // куда подлетаем камерой на sleep, опционально
-    public float sleepDuration = 3f;
+    public Transform sleepCameraView; // необязательно
+    public float sleepDuration = 1f;
 
     public void Interact(PlayerController player)
     {
-        // разрешаем спать только если collectionManager.storySubmittedCount > 0 или player.onlyAllowSleep == true
+        // проверяем менеджер коллекции
         var coll = FindObjectOfType<GameCollectionManager>();
-        if (coll == null || coll.storySubmittedCount <= 0)
+        if (coll == null)
         {
-            Debug.Log("You cannot sleep yet — submit a story disc first.");
+            Debug.LogWarning("SleepSpot: no GameCollectionManager found.");
             return;
         }
 
-        // если всё ок — запускаем корутину сна (можно в PlayerController или тут)
-        player.SetInputBlocked(true);
-        // Запустить анимацию сна / затем снять флаги
-        StartCoroutine(DoSleep(player));
+        // проверка — есть ли разрешение на сон (и одновременно забираем его)
+        bool allowed = coll.ConsumeSleepPermit();
+        if (!allowed)
+        {
+            Debug.Log("You cannot sleep yet — submit a story disc first.");
+            // можно показать UI-подсказку
+            return;
+        }
+
+        // если разрешение есть — разрешаем спать (и снимаем режим "только сон" после сна)
+        StartCoroutine(DoSleepCoroutine(player));
     }
 
-    private System.Collections.IEnumerator DoSleep(PlayerController player)
+    private IEnumerator DoSleepCoroutine(PlayerController player)
     {
-        // можно плывущую анимацию / камера / затем установить флажок, что игрок снова активен
+        // блокируем управление на время сна
+        player.SetInputBlocked(true);
+        // тут можно сделать подлёт камеры к sleepCameraView, проиграть анимацию и т.д.
+
+        // ждём реального времени (не Time.timeScale)
         yield return new WaitForSecondsRealtime(sleepDuration);
 
-        // после сна снимаем onlyAllowSleep
-        player.SetInteractionOnlySleepMode(false);
+        // после сна — снимаем специальный режим, чтобы игрок снова мог взаимодействовать нормально
+        player.SetInteractionOnlySleepMode(false); // добавь этот метод в PlayerController если ещё нет
         player.SetInputBlocked(false);
 
-        // опционально: продвинуть день, восстановить здоровье и т.д.
         Debug.Log("You slept.");
     }
 
-    public bool GetUsed()
-    {
-        return false;
-    }
+    public bool GetUsed() => false;
 }

@@ -23,7 +23,8 @@ public class GameCollectionManager : MonoBehaviour
     // Событие — вызывается когда игра была успешно разблокирована (новая)
     public event Action<string> OnGameUnlocked;
 
-    public int storySubmittedCount = 0;
+    public int storySubmittedCount = 0; // общее число сданных сюжетных дисков
+    private int pendingSleepPermits = 0; // сколько раз игрок ещё может поспать (разрешения, полученные сдачей сюжетных дисков)
     public event Action<int> OnStorySubmitted; // передаёт новый count
 
     private void Awake()
@@ -101,6 +102,7 @@ public class GameCollectionManager : MonoBehaviour
     {
         // защита: уже может быть разблокировано — но считаем сданным
         storySubmittedCount++;
+        pendingSleepPermits++;
         OnStorySubmitted?.Invoke(storySubmittedCount);
 
         // Если достигли 6 — конец игры
@@ -109,4 +111,14 @@ public class GameCollectionManager : MonoBehaviour
             EndGameManager.Instance?.EndGame(); // см. Singleton EndGameManager ниже
         }
     }
+
+    public bool ConsumeSleepPermit()
+    {
+        if (pendingSleepPermits > 0)
+        {
+            pendingSleepPermits--;
+            return true;
+        }
+        return false;
+}
 }

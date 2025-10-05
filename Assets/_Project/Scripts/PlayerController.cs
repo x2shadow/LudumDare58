@@ -288,27 +288,34 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnInteract(InputAction.CallbackContext context)
+    private void OnInteract(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         if (isInputBlocked) return;
-        if (interactionsBlocked) return;
         if (context.performed && currentInteractable != null)
         {
+            // Если игрок держит диск, то запрещаем взаимодействие с терминалом ПК
+            var hold = GetComponent<PlayerHoldItem>();
+            if (hold != null && hold.HasDisc && currentInteractable is PCTerminal)
+            {
+                // можно показать подсказку в UI, что нужно сначала сдать диск
+                Debug.Log("You can't use the PC while holding a disc. Deposit it first.");
+                return;
+            }
+
+            // Если в режиме 'only allow sleep' — разрешаем интеракт только со SleepSpot
             if (onlyAllowSleep)
             {
-                // предположим SleepSpot реализует ISleepSpot интерфейс или имеет компонент SleepSpot
-                if (currentInteractable is SleepSpot) // или check by GetComponent<SleepSpot>()
+                if (currentInteractable is SleepSpot)
                 {
                     currentInteractable.Interact(this);
                 }
                 else
                 {
-                    // нельзя ничего делать — возможно показать подсказку
                     Debug.Log("You must sleep before doing anything else.");
                 }
                 return;
             }
-            
+
             currentInteractable.Interact(this);
         }
     }

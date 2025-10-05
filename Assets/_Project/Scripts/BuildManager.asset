@@ -22,6 +22,7 @@ MonoBehaviour:
     discIcon: {fileID: 21300000, guid: 12b597f4d2b9b664f90dbb8f7e128f54, type: 3}
     discPrefab: {fileID: 6454716354858174482, guid: 70225403294dd49478b45edafa9ca0b8,
       type: 3}
+    dialogueScript: {fileID: 11400000, guid: ee9ba75797114864db6ff48254cdb9c7, type: 2}
     unlockMechanicName: Narrative
     unlockMechanicIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   - mechanics:
@@ -32,6 +33,7 @@ MonoBehaviour:
     isStoryDisc: 1
     discIcon: {fileID: 0}
     discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 0}
     unlockMechanicName: 
     unlockMechanicIcon: {fileID: 0}
   - mechanics:
@@ -43,6 +45,7 @@ MonoBehaviour:
     isStoryDisc: 1
     discIcon: {fileID: 0}
     discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 0}
     unlockMechanicName: Graphics
     unlockMechanicIcon: {fileID: 0}
   - mechanics:
@@ -54,6 +57,7 @@ MonoBehaviour:
     isStoryDisc: 1
     discIcon: {fileID: 0}
     discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 0}
     unlockMechanicName: 
     unlockMechanicIcon: {fileID: 0}
   - mechanics:
@@ -65,6 +69,7 @@ MonoBehaviour:
     isStoryDisc: 1
     discIcon: {fileID: 0}
     discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 0}
     unlockMechanicName: Audio
     unlockMechanicIcon: {fileID: 0}
   - mechanics:
@@ -77,6 +82,7 @@ MonoBehaviour:
     isStoryDisc: 1
     discIcon: {fileID: 0}
     discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 0}
     unlockMechanicName: 
     unlockMechanicIcon: {fileID: 0}
   - mechanics:
@@ -88,5 +94,6 @@ MonoBehaviour:
     isStoryDisc: 0
     discIcon: {fileID: 0}
     discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 0}
     unlockMechanicName: 
     unlockMechanicIcon: {fileID: 0}
