@@ -6,6 +6,7 @@ public class EndGameManager : MonoBehaviour
     public static EndGameManager Instance;
     public GameObject endGameWords; // UI для финала
     public GameObject credits; // UI для финала
+    public GameObject credits2; // UI для финала
     private ScreenFader screenFader;
 
     private void Awake()
@@ -41,5 +42,9 @@ public class EndGameManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(1f);
 
         credits.SetActive(true);
+
+        yield return new WaitForSecondsRealtime(3f);
+
+        credits2.SetActive(true);
     }
 }
