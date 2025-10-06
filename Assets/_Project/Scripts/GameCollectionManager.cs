@@ -47,8 +47,7 @@ public class GameCollectionManager : MonoBehaviour
         {
             foreach (var combo in buildManager.validCombos)
             {
-                if (!string.IsNullOrEmpty(combo.gameName))
-                    SetIconFor(combo.gameName, combo.gameIcon);
+                //if (!string.IsNullOrEmpty(combo.gameName)) SetIconFor(combo.gameName, combo.gameIcon);
             }
         }
     }
