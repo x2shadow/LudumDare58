@@ -250,7 +250,7 @@ public class BuildUIController : MonoBehaviour
 
         Close();
         
-        infoText.text = "InfoText";
+        infoText.text = "Build Status...";
     }
 
     // (опционально) если другой код хочет принудительно очистить
