@@ -9,11 +9,11 @@ public class GameCollectionManager : MonoBehaviour
     public class GameSlot
     {
         public string gameName;
-        public Image lockImage;
-        public Image gameIconImage;
         public Sprite gameSprite;
+        public GameObject gameObj;
     }
 
+    public Sprite lockImage;
     public List<GameSlot> slots = new List<GameSlot>();
     private Dictionary<string, GameSlot> map;
     private HashSet<string> unlocked = new HashSet<string>();
@@ -36,12 +36,8 @@ public class GameCollectionManager : MonoBehaviour
         {
             if (string.IsNullOrEmpty(s.gameName)) continue;
             map[s.gameName] = s;
-            if (s.lockImage != null) s.lockImage.gameObject.SetActive(true);
-            if (s.gameIconImage != null)
-            {
-                s.gameIconImage.gameObject.SetActive(false);
-                if (s.gameSprite != null) s.gameIconImage.sprite = s.gameSprite;
-            }
+            //if (s.lockImage != null) s.lockImage.gameObject.SetActive(true);
+            s.gameObj.GetComponent<MeshRenderer>().material.mainTexture = lockImage.texture;
         }
     }
 
@@ -74,11 +70,10 @@ public class GameCollectionManager : MonoBehaviour
 
         unlocked.Add(gameName);
 
-        if (slot.lockImage != null) slot.lockImage.gameObject.SetActive(false);
-        if (slot.gameIconImage != null)
+        //if (slot.lockImage != null) slot.lockImage.gameObject.SetActive(false);
+        if (slot.gameObj != null)
         {
-            if (slot.gameSprite != null) slot.gameIconImage.sprite = slot.gameSprite;
-            slot.gameIconImage.gameObject.SetActive(true);
+            if (slot.gameSprite != null) slot.gameObj.GetComponent<MeshRenderer>().material.mainTexture = slot.gameSprite.texture;
         }
 
         OnGameUnlocked?.Invoke(gameName);
@@ -97,7 +92,7 @@ public class GameCollectionManager : MonoBehaviour
         if (string.IsNullOrEmpty(gameName)) return;
         if (!map.TryGetValue(gameName, out var slot)) return;
         slot.gameSprite = icon;
-        if (slot.gameIconImage != null) slot.gameIconImage.sprite = icon;
+        if (slot.gameSprite != null) slot.gameObj.GetComponent<MeshRenderer>().material.mainTexture = slot.gameSprite.texture;
     }
 
     public bool RecordStoryDiscSubmitted(string gameName)
