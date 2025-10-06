@@ -24,7 +24,8 @@ MonoBehaviour:
       type: 3}
     dialogueScript: {fileID: 11400000, guid: 3a9520163f305034584ed06036895dc9, type: 2}
     unlockMechanicName: Narrative
-    unlockMechanicIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+    unlockMechanicIcon: {fileID: 21300000, guid: bc38c9595c3da0844b02d0039946a93e,
+      type: 3}
   - mechanics:
     - Gameplay
     - Narrative
