@@ -81,6 +81,7 @@ public class FootstepsSFX : MonoBehaviour
 		// random pitch ±20% (0.8 - 1.2)
 		float randomPitch = Random.Range(0.8f, 1.2f);
 		audioSource.pitch = randomPitch;
+        audioSource.volume = AudioManager.Instance.GetSoundVolume();
 		audioSource.PlayOneShot(clip);
 		audioSource.pitch = 1f; // сбрасываем на дефолт
 }

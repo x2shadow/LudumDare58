@@ -187,8 +187,8 @@ public class BuildUIController : MonoBehaviour
             }
             */
 
-            StartCoroutine(ShowResultAndClose($"Build successful: {combo.gameName}", true));
-            //StartCoroutine(ShowResultAndClose($"Build successful!", true));
+            //StartCoroutine(ShowResultAndClose($"Build successful: {combo.gameName}", true));
+            StartCoroutine(ShowResultAndClose($"Build successful!", true));
         }
         else
         {
