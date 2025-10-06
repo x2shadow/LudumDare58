@@ -96,6 +96,22 @@ public class PlayerController : MonoBehaviour
     private float originalControllerHeight;
     private Vector3 originalControllerCenter;
 
+    //
+    public bool IsInputBlockedPublic()
+    {
+        return isInputBlocked;
+    }
+
+    public bool IsInteractionBlockedPublic()
+    {
+        return interactionsBlocked;
+    }
+
+    public bool IsOnlyAllowSleepPublic()
+    {
+        return onlyAllowSleep;
+    }
+
     private bool IsCurrentDeviceMouse
     {
         get

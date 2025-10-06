@@ -48,7 +48,8 @@ MonoBehaviour:
     discPrefab: {fileID: 0}
     dialogueScript: {fileID: 11400000, guid: c9a340b5a4fd69f4bb894bba8d028e21, type: 2}
     unlockMechanicName: Graphics
-    unlockMechanicIcon: {fileID: 0}
+    unlockMechanicIcon: {fileID: 21300000, guid: ee5c7b1f3aa7532408adf3749ee1a65b,
+      type: 3}
   - mechanics:
     - Gameplay
     - Narrative
@@ -72,7 +73,8 @@ MonoBehaviour:
     discPrefab: {fileID: 0}
     dialogueScript: {fileID: 11400000, guid: 16142eec126dfeb45877edcaf96c75de, type: 2}
     unlockMechanicName: Audio
-    unlockMechanicIcon: {fileID: 0}
+    unlockMechanicIcon: {fileID: 21300000, guid: b52a277068a459644bd64dd3cd2cf688,
+      type: 3}
   - mechanics:
     - Gameplay
     - Narrative
@@ -87,11 +89,21 @@ MonoBehaviour:
     unlockMechanicName: 
     unlockMechanicIcon: {fileID: 0}
   - mechanics:
-    - Gameplay
-    - Gameplay
-    - Gameplay
+    - Narrative
+    - Narrative
     gameName: Game_7
-    gameIcon: {fileID: 21300000, guid: 6e4e2d5a2534796429a8fbfa50464a3d, type: 3}
+    gameIcon: {fileID: 21300000, guid: 0d20383e8b1a16045a67ba6cde08606f, type: 3}
+    isStoryDisc: 0
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 0}
+    unlockMechanicName: 
+    unlockMechanicIcon: {fileID: 0}
+  - mechanics:
+    - Gameplay
+    - Graphics
+    gameName: Game_8
+    gameIcon: {fileID: 21300000, guid: 2b07377fa28833b4fb7549031b7b37d0, type: 3}
     isStoryDisc: 0
     discIcon: {fileID: 0}
     discPrefab: {fileID: 0}

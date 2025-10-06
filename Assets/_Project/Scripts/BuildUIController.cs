@@ -158,6 +158,9 @@ public class BuildUIController : MonoBehaviour
         // Очистка DropZone сразу после билда (по требованию)
         ClearMechanics();
 
+        // Протестить потерю фокуса в WebGL
+        Cursor.lockState = CursorLockMode.Locked;
+
         if (combo != null)
         {
 
@@ -185,6 +188,7 @@ public class BuildUIController : MonoBehaviour
             */
 
             StartCoroutine(ShowResultAndClose($"Build successful: {combo.gameName}", true));
+            //StartCoroutine(ShowResultAndClose($"Build successful!", true));
         }
         else
         {

@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lines:
   - speaker: 0
-    text: Gotta deposit disc first!
+    text: I need to deposit disc first!
     voiceover: {fileID: 0}
     duration: 2

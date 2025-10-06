@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lines:
   - speaker: 0
-    text: I'm tired... Gotta sleep!
+    text: I'm tired... I need to sleep
     voiceover: {fileID: 0}
     duration: 2

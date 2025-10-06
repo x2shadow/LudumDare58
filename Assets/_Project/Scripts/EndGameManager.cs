@@ -28,13 +28,13 @@ public class EndGameManager : MonoBehaviour
 
     private IEnumerator EndGameCoroutine()
     {
-        yield return new WaitForSecondsRealtime(3f);
+        yield return new WaitForSecondsRealtime(7f);
 
         yield return screenFader.FadeIn(0.25f);
 
         endGameWords.SetActive(true);
 
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(15f);
 
         endGameWords.SetActive(false);
 
