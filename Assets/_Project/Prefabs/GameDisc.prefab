@@ -182,5 +182,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameName: TestGame
   isStory: 0
+  dialogueScript: {fileID: 0}
   icon: {fileID: 21300000, guid: 12b597f4d2b9b664f90dbb8f7e128f54, type: 3}
   coverImage: {fileID: 4165017277240866148}

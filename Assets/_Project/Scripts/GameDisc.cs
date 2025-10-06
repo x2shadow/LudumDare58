@@ -19,5 +19,6 @@ public class GameDisc : MonoBehaviour
         this.dialogueScript = dialogueScript;
 
         coverImage.GetComponent<MeshRenderer>().material.mainTexture = icon.texture;
+        coverImage.GetComponent<MeshRenderer>().material.SetTexture("_EmissionMap", icon.texture);
     }
 }
