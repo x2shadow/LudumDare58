@@ -162,7 +162,7 @@ public class BuildUIController : MonoBehaviour
         {
 
             // получаем prefab диска: предпочтительно взять combo.discPrefab, иначе глобальный prefab
-            GameObject discPrefabToSpawn = combo.discPrefab != null ? combo.discPrefab : defaultGameDiscPrefab; 
+            GameObject discPrefabToSpawn = combo.discPrefab != null ? combo.discPrefab : defaultGameDiscPrefab;
             // выдаём игроку диск
             var hold = playerController.GetComponent<PlayerHoldItem>();
             if (hold != null)
@@ -240,7 +240,7 @@ public class BuildUIController : MonoBehaviour
             infoText.text = message;
         }
 
-        float wait = success ? 1.2f : 1.0f;
+        float wait = success ? 1.5f : 1.0f;
         float timer = 0f;
         while (timer < wait)
         {
@@ -249,8 +249,11 @@ public class BuildUIController : MonoBehaviour
         }
 
         Close();
-        
+
         infoText.text = "Build Status...";
+        
+        // Костыль подсказки
+        if (InteractionIndicatorManager.Instance != null) InteractionIndicatorManager.Instance.ResetAll();
     }
 
     // (опционально) если другой код хочет принудительно очистить
