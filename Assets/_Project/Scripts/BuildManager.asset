@@ -1,0 +1,203 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 934e2dbd7748d2b48a5caffd6914b182, type: 3}
+  m_Name: BuildManager
+  m_EditorClassIdentifier: 
+  validCombos:
+  - mechanics:
+    - Gameplay
+    - Gameplay
+    gameName: Game_1
+    gameIcon: {fileID: 21300000, guid: 6e4e2d5a2534796429a8fbfa50464a3d, type: 3}
+    isStoryDisc: 1
+    discIcon: {fileID: 21300000, guid: 12b597f4d2b9b664f90dbb8f7e128f54, type: 3}
+    discPrefab: {fileID: 6454716354858174482, guid: 70225403294dd49478b45edafa9ca0b8,
+      type: 3}
+    dialogueScript: {fileID: 11400000, guid: 3a9520163f305034584ed06036895dc9, type: 2}
+    unlockMechanicName: Narrative
+    unlockMechanicIcon: {fileID: 21300000, guid: bc38c9595c3da0844b02d0039946a93e,
+      type: 3}
+  - mechanics:
+    - Gameplay
+    - Narrative
+    gameName: Game_2
+    gameIcon: {fileID: 21300000, guid: 3dec9097d54a5b4408af29fbea859d07, type: 3}
+    isStoryDisc: 1
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 11400000, guid: 91499bfaa96ecd8459c65721c5062588, type: 2}
+    unlockMechanicName: 
+    unlockMechanicIcon: {fileID: 0}
+  - mechanics:
+    - Gameplay
+    - Narrative
+    - Narrative
+    gameName: Game_3
+    gameIcon: {fileID: 21300000, guid: 6d8b93c14b1531441ac1ab0d4c1ee233, type: 3}
+    isStoryDisc: 1
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 11400000, guid: c9a340b5a4fd69f4bb894bba8d028e21, type: 2}
+    unlockMechanicName: Graphics
+    unlockMechanicIcon: {fileID: 21300000, guid: ee5c7b1f3aa7532408adf3749ee1a65b,
+      type: 3}
+  - mechanics:
+    - Gameplay
+    - Narrative
+    - Graphics
+    gameName: Game_4
+    gameIcon: {fileID: 21300000, guid: f40d78950e2f1d14d94ec9fcc2b2ffda, type: 3}
+    isStoryDisc: 1
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 11400000, guid: e9fa7d0d5e328a841bbbbd4d24cc6381, type: 2}
+    unlockMechanicName: 
+    unlockMechanicIcon: {fileID: 0}
+  - mechanics:
+    - Graphics
+    - Graphics
+    - Graphics
+    gameName: Game_5
+    gameIcon: {fileID: 21300000, guid: 8aa892ff6edb23b479d420c0d80977a2, type: 3}
+    isStoryDisc: 1
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 11400000, guid: 16142eec126dfeb45877edcaf96c75de, type: 2}
+    unlockMechanicName: Audio
+    unlockMechanicIcon: {fileID: 21300000, guid: b52a277068a459644bd64dd3cd2cf688,
+      type: 3}
+  - mechanics:
+    - Gameplay
+    - Narrative
+    - Graphics
+    - Audio
+    gameName: Game_6
+    gameIcon: {fileID: 21300000, guid: 12b597f4d2b9b664f90dbb8f7e128f54, type: 3}
+    isStoryDisc: 1
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 11400000, guid: 3e4f08ae62b15c942b55978a87bb0e2d, type: 2}
+    unlockMechanicName: 
+    unlockMechanicIcon: {fileID: 0}
+  - mechanics:
+    - Narrative
+    - Narrative
+    gameName: Game_7
+    gameIcon: {fileID: 21300000, guid: 0d20383e8b1a16045a67ba6cde08606f, type: 3}
+    isStoryDisc: 0
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 0}
+    unlockMechanicName: 
+    unlockMechanicIcon: {fileID: 0}
+  - mechanics:
+    - Gameplay
+    - Graphics
+    gameName: Game_8
+    gameIcon: {fileID: 21300000, guid: 2b07377fa28833b4fb7549031b7b37d0, type: 3}
+    isStoryDisc: 0
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 0}
+    unlockMechanicName: 
+    unlockMechanicIcon: {fileID: 0}
+  - mechanics:
+    - Narrative
+    - Audio
+    gameName: Game_9
+    gameIcon: {fileID: 21300000, guid: bfc088808114cbb46b21f76679d4fdd8, type: 3}
+    isStoryDisc: 0
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 0}
+    unlockMechanicName: 
+    unlockMechanicIcon: {fileID: 0}
+  - mechanics:
+    - Narrative
+    - Graphics
+    gameName: Game_10
+    gameIcon: {fileID: 21300000, guid: 080a9896fa432e64997c26441a4c4678, type: 3}
+    isStoryDisc: 0
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 0}
+    unlockMechanicName: 
+    unlockMechanicIcon: {fileID: 0}
+  - mechanics:
+    - Graphics
+    - Graphics
+    - Graphics
+    - Graphics
+    gameName: Giza's Adventure
+    gameIcon: {fileID: 21300000, guid: b8208034e2ad8044290eb326be49c108, type: 3}
+    isStoryDisc: 0
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 11400000, guid: 408f8453f7141c841a17edd0b341590c, type: 2}
+    unlockMechanicName: 
+    unlockMechanicIcon: {fileID: 0}
+  - mechanics:
+    - Graphics
+    - Graphics
+    gameName: Game_11
+    gameIcon: {fileID: 21300000, guid: 7ae7a6e276030404e9a298d075ef8eff, type: 3}
+    isStoryDisc: 0
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 0}
+    unlockMechanicName: 
+    unlockMechanicIcon: {fileID: 0}
+  - mechanics:
+    - Gameplay
+    - Audio
+    gameName: Game_12
+    gameIcon: {fileID: 21300000, guid: e7c7099bc552c0e459a83fd04f63c2d4, type: 3}
+    isStoryDisc: 0
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 0}
+    unlockMechanicName: 
+    unlockMechanicIcon: {fileID: 0}
+  - mechanics:
+    - Gameplay
+    - Gameplay
+    - Gameplay
+    gameName: Game_13
+    gameIcon: {fileID: 21300000, guid: 6b0868e482f08404ba303fdfe8331fcf, type: 3}
+    isStoryDisc: 0
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 0}
+    unlockMechanicName: 
+    unlockMechanicIcon: {fileID: 0}
+  - mechanics:
+    - Graphics
+    - Audio
+    gameName: Game_14
+    gameIcon: {fileID: 21300000, guid: 8add74e995b3e4846be99a15dc3eb447, type: 3}
+    isStoryDisc: 0
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 0}
+    unlockMechanicName: 
+    unlockMechanicIcon: {fileID: 0}
+  - mechanics:
+    - Audio
+    - Audio
+    gameName: Game_15
+    gameIcon: {fileID: 21300000, guid: 1c15a182519c22e4d87fed31f82faf81, type: 3}
+    isStoryDisc: 0
+    discIcon: {fileID: 0}
+    discPrefab: {fileID: 0}
+    dialogueScript: {fileID: 0}
+    unlockMechanicName: 
+    unlockMechanicIcon: {fileID: 0}
