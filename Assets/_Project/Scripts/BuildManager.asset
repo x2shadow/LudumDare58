@@ -142,7 +142,7 @@ MonoBehaviour:
     isStoryDisc: 0
     discIcon: {fileID: 0}
     discPrefab: {fileID: 0}
-    dialogueScript: {fileID: 0}
+    dialogueScript: {fileID: 11400000, guid: 408f8453f7141c841a17edd0b341590c, type: 2}
     unlockMechanicName: 
     unlockMechanicIcon: {fileID: 0}
   - mechanics:

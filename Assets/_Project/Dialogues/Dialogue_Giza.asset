@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6dd1e3410f96104f8d1987f7d745f0b, type: 3}
   m_Name: Dialogue_Giza
   m_EditorClassIdentifier: 
-  lines: []
+  lines:
+  - speaker: 0
+    text: From Giza with blood!
+    voiceover: {fileID: 0}
+    duration: 5
